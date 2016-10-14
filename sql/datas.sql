@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `deal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `deal` (
-  `deal_id` int(11) NOT NULL,
+  `deal_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_name` varchar(45) NOT NULL,
   `brand_name` varchar(45) NOT NULL,
   `price` double NOT NULL,
@@ -116,4 +116,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-14 20:18:55
+-- Dump completed on 2016-10-14 20:22:21
