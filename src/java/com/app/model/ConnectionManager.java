@@ -17,6 +17,7 @@ public class ConnectionManager {
   private static String dbUser;
   private static String dbPassword;
   private static String dbURL;
+  private static String dataDir;
 
   static {
     if (!readOpenshiftDatabaseProperties()) {
@@ -38,7 +39,8 @@ public class ConnectionManager {
     String dbName = System.getenv("OPENSHIFT_APP_NAME");
     dbUser = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
     dbPassword = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-
+    dataDir = System.getenv("OPENSHIFT_DATA_DIR"); //the picture will be saved here
+    
     dbURL = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
     return true;
   }
@@ -61,6 +63,7 @@ public class ConnectionManager {
       String dbName = props.getProperty("db.name");
       dbUser = props.getProperty("db.user");
       dbPassword = props.getProperty("db.password");
+      dataDir = "/data";
 
       dbURL = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
     } catch (Exception ex) {
