@@ -23,13 +23,13 @@ public class Deal {
     private String shop;
     private String location;
     private Date dateCreated;
-    private int userDeviceId;
+    private String userDeviceId;
     private int likeCount;
     private int dislikeCount;
 
     public Deal(String dealId, String name, String brand, double price, String description,
             String apiKeyword, String imgURL, String shop, String location,
-            Date dateCreated, int userDeviceId, int likeCount, int dislikeCount) {
+            Date dateCreated, String userDeviceId, int likeCount, int dislikeCount) {
         this.dealId = dealId;
         this.name = name;
         this.brand = brand;
@@ -46,7 +46,7 @@ public class Deal {
     }
 
     public Deal(String dealId, String name, String brand, double price, String description,
-            String apiKeyword, String imgURL, String shop, String location, int userDeviceId,
+            String apiKeyword, String imgURL, String shop, String location, String userDeviceId,
             int likeCount, int dislikeCount) {
         this.dealId = dealId;
         this.name = name;
@@ -79,7 +79,7 @@ public class Deal {
         return location;
     }
 
-    public int getUserDeviceId() {
+    public String getUserDeviceId() {
         return userDeviceId;
     }
 
