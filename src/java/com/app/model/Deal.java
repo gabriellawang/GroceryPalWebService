@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
  */
 public class Deal {
 
-    private String dealId;
+    private int dealId;
     private String name;
     private String brand;
     private double price;
@@ -27,7 +27,7 @@ public class Deal {
     private int likeCount;
     private int dislikeCount;
 
-    public Deal(String dealId, String name, String brand, double price, String description,
+    public Deal(int dealId, String name, String brand, double price, String description,
             String apiKeyword, String imgURL, String shop, String location,
             Date dateCreated, String userDeviceId, int likeCount, int dislikeCount) {
         this.dealId = dealId;
@@ -45,7 +45,7 @@ public class Deal {
         this.dislikeCount = dislikeCount;
     }
 
-    public Deal(String dealId, String name, String brand, double price, String description,
+    public Deal(int dealId, String name, String brand, double price, String description,
             String apiKeyword, String imgURL, String shop, String location, String userDeviceId,
             int likeCount, int dislikeCount) {
         this.dealId = dealId;
@@ -63,7 +63,7 @@ public class Deal {
         this.dislikeCount = dislikeCount;
     }
 
-    public String getDealId() {
+    public int getDealId() {
         return dealId;
     }
 

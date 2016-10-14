@@ -25,6 +25,10 @@ public class ConnectionManager {
     }
     initDBDriver();
   }
+  
+  public static String getDataDirectory(){
+      return dataDir;
+  }
 
   private static boolean readOpenshiftDatabaseProperties() {
     // grab environment variable
