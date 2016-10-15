@@ -6,7 +6,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>AddNewDeal</servlet-name>
-        <url-pattern>/addNewDeal</url-pattern>
+        <url-pattern>/upload</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

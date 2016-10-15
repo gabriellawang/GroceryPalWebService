@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,8 +42,10 @@ public class AddNewDeal extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            String path = ConnectionManager.getDataDirectory();
-            HashMap<String, String> map = retrieveFile(path, request);// need to change to relative path.
+            ServletContext context = request.getServletContext();
+            File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
+
+            HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);// need to change to relative path.
 
             String name = map.get("name");
             String shop = map.get("shop");
@@ -51,10 +54,11 @@ public class AddNewDeal extends HttpServlet {
             String description = map.get("description");
             String deviceId = map.get("udid");
             String imgURL = "";
-            if(map.get("filename") != null){
-                imgURL = map.get("filename");
+            if (map.get("filename") != null) {
+                imgURL = repository.getAbsolutePath() + File.separatorChar + map.get("filename");
+                System.out.println("imgURL = " + imgURL);
             }
-            Deal deal = new Deal(-1, name, brand, price, description, "Google Vision API", 
+            Deal deal = new Deal(-1, name, brand, price, description, "Google Vision API",
                     imgURL, shop, "location data", deviceId, 0, 0);
             DealDAO dealDao = new DealDAO();
             dealDao.addDeal(deal);
