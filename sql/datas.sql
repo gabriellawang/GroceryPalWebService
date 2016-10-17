@@ -31,15 +31,15 @@ CREATE TABLE `deal` (
   `price` double NOT NULL,
   `shop` varchar(45) NOT NULL,
   `location` varchar(45) NOT NULL,
-  `time` datetime NOT NULL,
-  `img_dir` varchar(80) NOT NULL,
+  `time` varchar(50) NOT NULL,
+  `img_dir` varchar(500) NOT NULL,
   `like_count` int(11) NOT NULL,
   `dislike_count` int(11) NOT NULL,
   `device_id` varchar(16) NOT NULL,
   `api_keyword` varchar(60) NOT NULL,
   PRIMARY KEY (`deal_id`),
   UNIQUE KEY `deal_id_UNIQUE` (`deal_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,6 +48,7 @@ CREATE TABLE `deal` (
 
 LOCK TABLES `deal` WRITE;
 /*!40000 ALTER TABLE `deal` DISABLE KEYS */;
+INSERT INTO `deal` VALUES (1,'12','12',12,'Sheng Siong','location data','15-10-2016 06:43:52','/Library/apache-tomcat-8.0.26/work/Catalina/localhost/GroceryPalWebService/IMG_20161015_184340.jpg',0,0,'654a6c3887b402a5','Google Vision API');
 /*!40000 ALTER TABLE `deal` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,8 +63,8 @@ CREATE TABLE `review` (
   `review_id` int(11) NOT NULL AUTO_INCREMENT,
   `deal_id` int(11) NOT NULL,
   `device_id` varchar(16) NOT NULL,
-  `review_time` datetime NOT NULL,
-  `content` varchar(200) NOT NULL,
+  `review_time` varchar(50) NOT NULL,
+  `content` varchar(500) NOT NULL,
   PRIMARY KEY (`review_id`),
   UNIQUE KEY `review_id_UNIQUE` (`review_id`),
   KEY `deal_id_idx` (`deal_id`)
@@ -116,4 +117,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-14 20:22:21
+-- Dump completed on 2016-10-17 17:50:06
