@@ -6,7 +6,6 @@
 package com.app.webservice;
 
 import com.app.DAO.DealDAO;
-import com.app.model.ConnectionManager;
 import com.app.model.Deal;
 import java.io.File;
 import java.io.IOException;
