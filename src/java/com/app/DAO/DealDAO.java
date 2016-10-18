@@ -58,12 +58,16 @@ public class DealDAO {
     public void updateLikes(){
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        int size = 0;
         try{
             conn.setAutoCommit(false);
             
             stmt = conn.prepareStatement("select count(*) from grocerypal.deal;");
             rs = stmt.executeQuery();
-            int size = rs.getInt(1);
+            while(rs.next()){
+                size = rs.getInt(1);
+            }
+            
             for(int i = 1; i <= size; i++){
                 stmt = conn.prepareStatement("update grocerypal.deal set deal.like_count="
                     + "(select count(*) from grocerypal.vote where vote.deal_id=? and vote.is_like=1), "
@@ -82,7 +86,7 @@ public class DealDAO {
         }
     }
 
-    public ArrayList<Deal> retrieveDeals(int udid, int range, int row) {
+    public ArrayList<Deal> retrieveDeals(String udid, int range, int row) {
         ArrayList<Deal> dList = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -91,10 +95,10 @@ public class DealDAO {
             conn.setAutoCommit(false);
 
             stmt = conn.prepareStatement("select deal.*, vote.is_like from grocerypal.deal "
-                    + "left join grocerypal.vote on vote.device_id=?"
-                    + "and deal.deal_id=vote.deal_id"
+                    + "left join grocerypal.vote on vote.device_id=? "
+                    + "and deal.deal_id=vote.deal_id "
                     + "order by deal_id DESC limit ?,?;");
-            stmt.setInt(1, udid);
+            stmt.setString(1, udid);
             stmt.setInt(2, row);
             stmt.setInt(3, range);
             rs = stmt.executeQuery();

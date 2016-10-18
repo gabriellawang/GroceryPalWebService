@@ -47,13 +47,13 @@ public class RetrieveDeal extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/JSON");
         try (PrintWriter out = response.getWriter()) {
-            ServletContext context = request.getServletContext();
-            File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
+            //ServletContext context = request.getServletContext();
+            //File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
 
-            HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);
-            int udid = Integer.parseInt(map.get("udid"));
-            int range = Integer.parseInt(map.get("range"));
-            int row = Integer.parseInt(map.get("row"));
+            //HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);
+            String udid = request.getParameter("udid");
+            int range = Integer.parseInt(request.getParameter("range"));
+            int row = Integer.parseInt(request.getParameter("row"));
             DealDAO dealDao = new DealDAO();
             dealDao.updateLikes();
             ArrayList<Deal> dList = dealDao.retrieveDeals(udid, range, row);
@@ -61,7 +61,7 @@ public class RetrieveDeal extends HttpServlet {
             
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             JsonObject jsonOutput = new JsonObject();
-            jsonOutput.addProperty("row", range);
+            jsonOutput.addProperty("row", row);
             JsonArray dealArray = new JsonArray();
             for(int i = 0; i < dList.size(); i++){
                 Deal d = dList.get(i);
