@@ -44,7 +44,7 @@ public class AddNewDeal extends HttpServlet {
             ServletContext context = request.getServletContext();
             File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
 
-            HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);// need to change to relative path.
+            HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);
 
             String name = map.get("name");
             String shop = map.get("shop");
@@ -54,13 +54,24 @@ public class AddNewDeal extends HttpServlet {
             String deviceId = map.get("udid");
             String imgURL = "";
             if (map.get("filename") != null) {
-                imgURL = repository.getAbsolutePath() + File.separatorChar + map.get("filename");
+                
+                imgURL = "http://"+request.getServerName()+":"+request.getServerPort()+"/"+context.getContextPath()+"/image?name=" + map.get("filename");
                 System.out.println("imgURL = " + imgURL);
             }
+
+            /*
+             Hey Ivan:
+             Before adding the new deal into database, we need to call the location service to 
+             get the current location of the shop.
+             We also need to send the image to vision API to collect the keywords for future searching.
+             Right now we just hard code these two value.
+             */
+
             Deal deal = new Deal(-1, name, brand, price, description, "Google Vision API",
                     imgURL, shop, "location data", deviceId, 0, 0);
             DealDAO dealDao = new DealDAO();
             dealDao.addDeal(deal);
+            dealDao.closeConnection();
         } catch (Throwable t) {
             t.printStackTrace();
         }

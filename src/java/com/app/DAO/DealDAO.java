@@ -9,7 +9,9 @@ import com.app.model.ConnectionManager;
 import com.app.model.Deal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,7 +32,7 @@ public class DealDAO {
         try {
             conn.setAutoCommit(false);
             stmt = conn.prepareStatement("INSERT INTO `grocerypal`.`deal` "
-                    + "(`product_name`,`brand_name`,`price`,`shop`,`location`,`time`,`img_dir`,`like_count`,`dislike_count`,`device_id`,`api_keyword`) "
+                    + "(`product_name`,`brand_name`,`price`,`shop`,`location`,`time`,`img_dir`,`like_count`,`dislike_count`,`device_id`,`api_keyword`,`description`) "
                     + "VALUES(?,?,?,?,?,?,?,?,?,?,?);");
             stmt.setString(1, newDeal.getName());
             stmt.setString(2, newDeal.getBrand());
@@ -43,6 +45,7 @@ public class DealDAO {
             stmt.setInt(9, newDeal.getDislikeCount());
             stmt.setString(10, newDeal.getUserDeviceId());
             stmt.setString(11, newDeal.getApiKeyword());
+            stmt.setString(12, newDeal.getDescription());
 
             stmt.execute();
             conn.commit();
@@ -50,6 +53,76 @@ public class DealDAO {
         } catch (SQLException ex) {
             Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void updateLikes(){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try{
+            conn.setAutoCommit(false);
+            
+            stmt = conn.prepareStatement("select count(*) from grocerypal.deal;");
+            rs = stmt.executeQuery();
+            int size = rs.getInt(1);
+            for(int i = 1; i <= size; i++){
+                stmt = conn.prepareStatement("update grocerypal.deal set deal.like_count="
+                    + "(select count(*) from grocerypal.vote where vote.deal_id=? and vote.is_like=1), "
+                    + "deal.dislike_count=(select count(*) from grocerypal.vote where vote.deal_id=? and vote.is_like=0)"
+                    + "where deal_id=?;");
+                stmt.setInt(1, i);
+                stmt.setInt(2, i);
+                stmt.setInt(3, i);
+                stmt.execute();
+            }
+            conn.commit();
+            stmt.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public ArrayList<Deal> retrieveDeals(int udid, int range, int row) {
+        ArrayList<Deal> dList = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            dList = new ArrayList<>();
+            conn.setAutoCommit(false);
+
+            stmt = conn.prepareStatement("select deal.*, vote.is_like from grocerypal.deal "
+                    + "left join grocerypal.vote on vote.device_id=?"
+                    + "and deal.deal_id=vote.deal_id"
+                    + "order by deal_id DESC limit ?,?;");
+            stmt.setInt(1, udid);
+            stmt.setInt(2, row);
+            stmt.setInt(3, range);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                int dealId = rs.getInt(1);
+                String pName = rs.getString(2);
+                String bName = rs.getString(3);
+                double price = rs.getDouble(4);
+                String shop = rs.getString(5);
+                String location = rs.getString(6);
+                String time = rs.getString(7);
+                String imgDir = rs.getString(8);
+                int like = rs.getInt(9);
+                int dislike = rs.getInt(10);
+                String deviceId = rs.getString(11);
+                String keyword = rs.getString(12);
+                String description = rs.getString(13);
+                int isLiked = rs.getInt(14);
+                Deal d = new Deal(dealId, pName, bName, price, description, keyword, 
+                        imgDir, shop, location, time, deviceId, like, dislike, isLiked);
+                dList.add(d);
+            }
+            conn.commit();
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return dList;
     }
 
     public void closeConnection() {
