@@ -117,6 +117,9 @@ public class DealDAO {
                 String keyword = rs.getString(12);
                 String description = rs.getString(13);
                 int isLiked = rs.getInt(14);
+                if(rs.wasNull()){
+                    isLiked = -1;
+                }
                 Deal d = new Deal(dealId, pName, bName, price, description, keyword, 
                         imgDir, shop, location, time, deviceId, like, dislike, isLiked);
                 dList.add(d);
