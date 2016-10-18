@@ -7,20 +7,16 @@ package com.app.webservice;
 
 import com.app.DAO.DealDAO;
 import com.app.model.Deal;
-import static com.app.webservice.AddNewDeal.retrieveFile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -59,7 +55,7 @@ public class RetrieveDeal extends HttpServlet {
             ArrayList<Deal> dList = dealDao.retrieveDeals(udid, range, row);
             row += range;
             
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
             JsonObject jsonOutput = new JsonObject();
             jsonOutput.addProperty("row", row);
             JsonArray dealArray = new JsonArray();

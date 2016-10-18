@@ -33,7 +33,7 @@ public class DealDAO {
             conn.setAutoCommit(false);
             stmt = conn.prepareStatement("INSERT INTO `grocerypal`.`deal` "
                     + "(`product_name`,`brand_name`,`price`,`shop`,`location`,`time`,`img_dir`,`like_count`,`dislike_count`,`device_id`,`api_keyword`,`description`) "
-                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?);");
+                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?);");
             stmt.setString(1, newDeal.getName());
             stmt.setString(2, newDeal.getBrand());
             stmt.setDouble(3, newDeal.getPrice());
