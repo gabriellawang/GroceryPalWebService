@@ -16,7 +16,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
+import org.apache.commons.codec.binary.Base64;
+
+
 
 /**
  *
@@ -49,7 +51,7 @@ public class CloudVisionApi {
             conn.setRequestProperty("Content-Type", "application/json");
 
             byte[] data = Files.readAllBytes(imagePath);
-            String base64String = Base64.getEncoder().encodeToString(data);
+            String base64String = Base64.encodeBase64String(data);
             
             String input = "{\n" +
                             "  \"requests\": \n" +
