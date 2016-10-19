@@ -55,7 +55,7 @@ public class AddNewDeal extends HttpServlet {
             String imgURL = "";
             if (map.get("filename") != null) {
                 
-                imgURL = "http://"+request.getServerName()+":"+request.getServerPort()+"/"+context.getContextPath()+"/image?name=" + map.get("filename");
+                imgURL = "http://"+request.getServerName()+":"+request.getServerPort()+context.getContextPath()+"/image?name=" + map.get("filename");
                 System.out.println("imgURL = " + imgURL);
             }
 
