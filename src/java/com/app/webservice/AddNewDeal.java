@@ -9,6 +9,8 @@ import com.app.DAO.DealDAO;
 import com.app.model.Deal;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletContext;
@@ -93,8 +95,11 @@ public class AddNewDeal extends HttpServlet {
             for (FileItem f : list) {
                 if (!f.isFormField()) {
                     if (f.getName().contains(".")) {
-                        f.write(new File(filePath + File.separator + f.getName()));
-                        toReturn.put("filename", f.getName());
+                        Date d = new Date();
+                        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyhhmmssSSS");
+                        String filename = sdf.format(d) + ".jpg";
+                        f.write(new File(filePath + File.separator + filename));
+                        toReturn.put("filename", filename);
                     }
                 } else {
                     toReturn.put(f.getFieldName(), f.getString());
