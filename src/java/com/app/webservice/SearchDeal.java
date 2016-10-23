@@ -50,21 +50,20 @@ public class SearchDeal extends HttpServlet {
             ServletContext context = request.getServletContext();
             File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
 
-            HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);
+            if (request.getContentType() != null && request.getContentType().equalsIgnoreCase("multipart/form-data;")) {
+                HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);
+                String imgURL = "";
+                String searchKeyword = map.get("keyword");
 
-            String imgURL = "";
-            String searchKeyword = "";
-            if (map.get("filename") != null) {
                 //user wants to search by photo
                 imgURL = "http://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath() + "/image?name=" + map.get("filename");
                 Path p = Paths.get(imgURL);
                 out.println(CloudVisionApi.callCloudVision(p));
-            }else{
+            } else {
                 //user wants to search by keyword
-                searchKeyword = request.getParameter("keyword");
-                out.println("search by text: print something there...");
+                String searchKeyword = request.getParameter("keyword");
+                out.println("search by text: " + searchKeyword);
             }
-
         }
     }
 
