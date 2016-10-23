@@ -43,7 +43,7 @@ public class Image extends HttpServlet {
         // retrieve mimeType dynamically
         String mime = cntx.getMimeType(repository.getAbsolutePath() + File.separatorChar + filename);
         response.setContentType(mime);
-        System.out.println(mime);
+        //System.out.println(mime);
         if (mime == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
