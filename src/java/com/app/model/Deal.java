@@ -29,7 +29,7 @@ public class Deal {
     private String userDeviceId;
     private int likeCount;
     private int dislikeCount;
-    private int isVoted;
+    private int isVoted; // -1 means the current user never vote the deal, 1 means voted.
 
     public Deal(int dealId, String name, String brand, double price, String description,
             String apiKeyword, String imgURL, String shop, String location,
