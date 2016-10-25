@@ -51,7 +51,7 @@ public class AddNewDeal extends HttpServlet {
             ServletContext context = request.getServletContext();
             File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
 
-            HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);
+            HashMap<String, String> map = retrieveFile(ConnectionManager.getDataDirectory(), request);
 
             String name = map.get("name");
             String shop = map.get("shop");
@@ -65,15 +65,15 @@ public class AddNewDeal extends HttpServlet {
                 imgURL = "http://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath() + "/image?name=" + map.get("filename");
                 System.out.println("imgURL = " + imgURL);
             }
-            String destinationFile = ConnectionManager.getDataDirectory() + map.get("filename");
+            //String destinationFile = ConnectionManager.getDataDirectory() + map.get("filename");
             
-            saveImage(imgURL, destinationFile);
+           //saveImage(imgURL, destinationFile);
 
             /*
                 something to be done for "LOCATION"!!!
             */
             Deal deal = new Deal(-1, name, brand, price, description, "Google Vision API",
-                    destinationFile, shop, "location data", deviceId, 0, 0);
+                    imgURL, shop, "location data", deviceId, 0, 0);
             DealDAO dealDao = new DealDAO();
             dealDao.addDeal(deal);
             dealDao.closeConnection();
