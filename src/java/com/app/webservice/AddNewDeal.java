@@ -6,9 +6,14 @@
 package com.app.webservice;
 
 import com.app.DAO.DealDAO;
+import com.app.model.ConnectionManager;
 import com.app.model.Deal;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,27 +61,41 @@ public class AddNewDeal extends HttpServlet {
             String deviceId = map.get("udid");
             String imgURL = "";
             if (map.get("filename") != null) {
-                
-                imgURL = "http://"+request.getServerName()+":"+request.getServerPort()+context.getContextPath()+"/image?name=" + map.get("filename");
+
+                imgURL = "http://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath() + "/image?name=" + map.get("filename");
                 System.out.println("imgURL = " + imgURL);
             }
+            String destinationFile = ConnectionManager.getDataDirectory() + map.get("filename");
+            
+            saveImage(imgURL, destinationFile);
 
             /*
-             Hey Ivan:
-             Before adding the new deal into database, we need to call the location service to 
-             get the current location of the shop.
-             We also need to send the image to vision API to collect the keywords for future searching.
-             Right now we just hard code these two value.
-             */
-
+                something to be done for "LOCATION"!!!
+            */
             Deal deal = new Deal(-1, name, brand, price, description, "Google Vision API",
-                    imgURL, shop, "location data", deviceId, 0, 0);
+                    destinationFile, shop, "location data", deviceId, 0, 0);
             DealDAO dealDao = new DealDAO();
             dealDao.addDeal(deal);
             dealDao.closeConnection();
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    public static void saveImage(String imageUrl, String destinationFile) throws IOException {
+        URL url = new URL(imageUrl);
+        InputStream is = url.openStream();
+        OutputStream os = new FileOutputStream(destinationFile);
+
+        byte[] b = new byte[2048];
+        int length;
+
+        while ((length = is.read(b)) != -1) {
+            os.write(b, 0, length);
+        }
+
+        is.close();
+        os.close();
     }
 
     public static HashMap<String, String> retrieveFile(String folder, HttpServletRequest request) throws IOException {

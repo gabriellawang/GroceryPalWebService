@@ -5,6 +5,7 @@
  */
 package com.app.webservice;
 
+import com.app.model.ConnectionManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,7 +51,8 @@ public class Image extends HttpServlet {
         }
 
         response.setContentType(mime);
-        File file = new File(repository.getAbsolutePath() + File.separatorChar + filename);
+        //File file = new File(repository.getAbsolutePath() + File.separatorChar + filename);
+        File file = new File(ConnectionManager.getDataDirectory() + filename);
         response.setContentLength((int) file.length());
 
         FileInputStream in = new FileInputStream(file);
