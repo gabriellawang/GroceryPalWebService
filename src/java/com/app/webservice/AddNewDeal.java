@@ -55,6 +55,7 @@ public class AddNewDeal extends HttpServlet {
             double price = Double.parseDouble(map.get("price"));
             String description = map.get("description");
             String deviceId = map.get("udid");
+            String location = map.get("location");
             String imgURL = "";
             if (map.get("filename") != null) {
 
@@ -66,7 +67,7 @@ public class AddNewDeal extends HttpServlet {
                 something to be done for "LOCATION"!!!
             */
             Deal deal = new Deal(-1, name, brand, price, description, "Google Vision API",
-                    imgURL, shop, "location data", deviceId, 0, 0);
+                    imgURL, shop, location, deviceId, 0, 0);
             DealDAO.addDeal(deal);
         } catch (Throwable t) {
             t.printStackTrace();
