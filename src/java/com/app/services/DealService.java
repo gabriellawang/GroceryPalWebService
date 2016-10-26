@@ -5,7 +5,13 @@
  */
 package com.app.services;
 
+import com.app.DAO.DealDAO;
+import com.app.model.Deal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,7 +24,7 @@ public class DealService {
     //Given the String json input, this method searches either LOGO, Text, Label on Diffmarts
     //Return the first result found in diffmarts, otherwise return a empty string.
     public static String retrieveDiffMartsResult(String jsonInput){
-        String diffMartsResult = "";
+        String resultToReturn = "";
         
         try{
             JSONObject jb = new JSONObject(jsonInput);
@@ -88,22 +94,51 @@ public class DealService {
                 for(String t : texts){
                     textStr = textStr + " " + t;
                 }
-                diffMartsResult = DiffMartsCrawler.getFirstResultFor(logoName + textStr);
+                resultToReturn = DiffMartsCrawler.getFirstResultFor(logoName + textStr);
                 
             } else {
-                // Search labels in diffMarts
-                String textStr = "";
+                //Todo  search labels in database
+                ArrayList<Deal> deals = new ArrayList<Deal>();
+                ArrayList<Integer> ids = new ArrayList<Integer>();
                 for(String t : labels){
-                    textStr += t + " ";
+                    deals = DealDAO.retrieveDealsByProperty(t);
+                    for(Deal d : deals){
+                        ids.add(d.getDealId());
+                    }
                 }
-                diffMartsResult = DiffMartsCrawler.getFirstResultFor(logoName + textStr.trim());
+                String[] idStrArr = (String[]) ids.toArray();
+                
+                //Get most relevant product 
+                int maxValue = 0;
+                String idStr = "";
+                Map<String,Integer> map = new HashMap<String, Integer>();  
+                for(int i =0 ;i<idStrArr.length;i++){  
+                    if(null!= map.get(idStrArr[i])){  
+                        map.put(idStrArr[i], map.get(idStrArr[i-1])+1); //value+1  
+                    }else{  
+                        map.put(idStrArr[i],1);  
+                    }  
+                }  
+                Iterator it = map.entrySet().iterator();    
+                while(it.hasNext()){  
+                    Map.Entry entry = (Map.Entry) it.next();     
+                    String  key  =  entry.getKey().toString();        
+                    int  value  =  Integer.parseInt(entry.getValue().toString());  
+                    if(value > maxValue){
+                        maxValue = value;
+                        idStr = key;
+                    }
+                }
+                if(!idStr.isEmpty()){
+                    resultToReturn = DealDAO.retrieveDealsById(Integer.parseInt(idStr)).getName();
+                }
             }
             
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
         
-        return diffMartsResult;
+        return resultToReturn;
     }
     
     //Given diffmarts result, this method will retrieve relevant deals in local database
