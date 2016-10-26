@@ -8,7 +8,6 @@ package com.app.services;
 import com.app.DAO.DealDAO;
 import com.app.model.Deal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -130,7 +129,7 @@ public class DealService {
                     }
                 }
                 if(!idStr.isEmpty()){
-                    resultToReturn = DealDAO.retrieveDealsById(Integer.parseInt(idStr)).getName();
+                    resultToReturn = DealDAO.retrieveDealById(Integer.parseInt(idStr)).getName();
                 }
             }
             

@@ -172,7 +172,7 @@ public class DealDAO {
         return dList;
     }
     
-    public static Deal retrieveDealsById(int id) {
+    public static Deal retrieveDealById(int id) {
         Connection conn = null;
         ArrayList<Deal> dList = null;
         PreparedStatement stmt = null;
