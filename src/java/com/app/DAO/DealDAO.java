@@ -129,12 +129,14 @@ public class DealDAO {
     }
     
     public static ArrayList<Deal> retrieveDealsByProperty(String property) {
+        Connection conn = null;
         ArrayList<Deal> dList = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
+            conn = ConnectionManager.getConnection();
             dList = new ArrayList<>();
-            conn.setAutoCommit(false);
+            
             //I think the SQL statement is wrong.  PLS make it correct. 
             stmt = conn.prepareStatement("SELECT * FROM deal WHERE property LIKE %?% ");
             stmt.setString(1, property);
@@ -162,7 +164,7 @@ public class DealDAO {
                         imgDir, shop, location, time, deviceId, like, dislike, isLiked);
                 dList.add(d);
             }
-            conn.commit();
+            //conn.commit();
             stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -171,13 +173,15 @@ public class DealDAO {
     }
     
     public static Deal retrieveDealsById(int id) {
+        Connection conn = null;
         ArrayList<Deal> dList = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Deal d = null;
         try {
+            conn = ConnectionManager.getConnection();
             dList = new ArrayList<>();
-            conn.setAutoCommit(false);
+            //conn.setAutoCommit(false);
             //I think the SQL statement is wrong.  PLS make it correct. 
             stmt = conn.prepareStatement("SELECT * FROM deal WHERE id = ? ");
             stmt.setInt(1, id);
@@ -211,14 +215,5 @@ public class DealDAO {
             Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return d;
-    }
-
-    public void closeConnection() {
-        try {
-            conn.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return dList;
     }
 }
