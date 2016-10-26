@@ -67,7 +67,7 @@ public class ConnectionManager {
       String dbName = props.getProperty("db.name");
       dbUser = props.getProperty("db.user");
       dbPassword = props.getProperty("db.password");
-      dataDir = "/data/";
+      dataDir = "";
 
       dbURL = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
     } catch (Exception ex) {

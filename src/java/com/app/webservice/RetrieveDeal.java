@@ -13,10 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -50,16 +47,15 @@ public class RetrieveDeal extends HttpServlet {
             String udid = request.getParameter("udid");
             int range = Integer.parseInt(request.getParameter("range"));
             int row = Integer.parseInt(request.getParameter("row"));
-            DealDAO dealDao = new DealDAO();
-            dealDao.updateLikes();
-            ArrayList<Deal> dList = dealDao.retrieveDeals(udid, range, row);
+            DealDAO.updateLikes();
+            ArrayList<Deal> dList = DealDAO.retrieveDeals(udid, range, row);
             row += range;
-            
+
             Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
             JsonObject jsonOutput = new JsonObject();
             jsonOutput.addProperty("row", row);
             JsonArray dealArray = new JsonArray();
-            for(int i = 0; i < dList.size(); i++){
+            for (int i = 0; i < dList.size(); i++) {
                 Deal d = dList.get(i);
                 JsonObject dObject = new JsonObject();
                 dObject.addProperty("deal_id", d.getDealId());
@@ -79,15 +75,12 @@ public class RetrieveDeal extends HttpServlet {
                 dealArray.add(dObject);
             }
             jsonOutput.add("deals", dealArray);
-            
+
             try {
                 out.println(gson.toJson(jsonOutput));
             } finally {
                 out.close();
-                dealDao.closeConnection();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(RetrieveDeal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

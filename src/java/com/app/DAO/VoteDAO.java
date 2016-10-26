@@ -18,27 +18,21 @@ import java.util.logging.Logger;
  */
 public class VoteDAO {
 
-    private static Connection conn;
-
-    public VoteDAO() throws SQLException {
-        conn = ConnectionManager.getConnection();
-    }
-
     /*
-    public static void main(String[] args) throws SQLException {
-        VoteDAO v = new VoteDAO();
-        v.voteDeal(1, "7e1907ef5fffa266", 1);
-        v.closeConnection();
-    }
-    */
-
-    public void voteDeal(int dealId, String deviceId, int isLiked) {
+     public static void main(String[] args) throws SQLException {
+     VoteDAO v = new VoteDAO();
+     v.voteDeal(1, "7e1907ef5fffa266", 1);
+     v.closeConnection();
+     }
+     */
+    public static void voteDeal(int dealId, String deviceId, int isLiked) {
         //add the vote inside grocerypal.vote
         //update the grocerypal.deal
         //isLiked = 0 means dislike; isLiked = 1 means like
+        Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            conn.setAutoCommit(false);
+            conn = ConnectionManager.getConnection();
             stmt = conn.prepareStatement("INSERT INTO `grocerypal`.`vote`"
                     + "(`device_id`,`is_like`,`deal_id`) values(?,?,?);");
             stmt.setString(1, deviceId);
@@ -55,15 +49,7 @@ public class VoteDAO {
             stmt.setInt(3, dealId);
             stmt.execute();
 
-            conn.commit();
             stmt.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void closeConnection() {
-        try {
             conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);

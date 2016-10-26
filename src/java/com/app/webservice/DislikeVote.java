@@ -8,9 +8,6 @@ package com.app.webservice;
 import com.app.DAO.VoteDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,11 +36,7 @@ public class DislikeVote extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String udid = request.getParameter("udid");
             int deadId = Integer.parseInt(request.getParameter("deal-id"));
-            VoteDAO vDao = new VoteDAO();
-            vDao.voteDeal(deadId, udid, 0);
-            vDao.closeConnection();
-        } catch (SQLException ex) {
-            Logger.getLogger(DislikeVote.class.getName()).log(Level.SEVERE, null, ex);
+            VoteDAO.voteDeal(deadId, udid, 0);
         }
     }
 

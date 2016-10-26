@@ -9,11 +9,7 @@ import com.app.DAO.DealDAO;
 import com.app.model.ConnectionManager;
 import com.app.model.Deal;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -65,37 +61,16 @@ public class AddNewDeal extends HttpServlet {
                 imgURL = "http://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath() + "/image?name=" + map.get("filename");
                 System.out.println("imgURL = " + imgURL);
             }
-            //String destinationFile = ConnectionManager.getDataDirectory() + map.get("filename");
-            
-           //saveImage(imgURL, destinationFile);
 
             /*
                 something to be done for "LOCATION"!!!
             */
             Deal deal = new Deal(-1, name, brand, price, description, "Google Vision API",
                     imgURL, shop, "location data", deviceId, 0, 0);
-            DealDAO dealDao = new DealDAO();
-            dealDao.addDeal(deal);
-            dealDao.closeConnection();
+            DealDAO.addDeal(deal);
         } catch (Throwable t) {
             t.printStackTrace();
         }
-    }
-
-    public static void saveImage(String imageUrl, String destinationFile) throws IOException {
-        URL url = new URL(imageUrl);
-        InputStream is = url.openStream();
-        OutputStream os = new FileOutputStream(destinationFile);
-
-        byte[] b = new byte[2048];
-        int length;
-
-        while ((length = is.read(b)) != -1) {
-            os.write(b, 0, length);
-        }
-
-        is.close();
-        os.close();
     }
 
     public static HashMap<String, String> retrieveFile(String folder, HttpServletRequest request) throws IOException {
