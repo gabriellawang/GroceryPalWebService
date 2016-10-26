@@ -138,7 +138,7 @@ public class DealDAO {
             dList = new ArrayList<>();
             
             //I think the SQL statement is wrong.  PLS make it correct. 
-            stmt = conn.prepareStatement("SELECT * FROM deal WHERE property LIKE %?% ");
+            stmt = conn.prepareStatement("SELECT * FROM deal WHERE api_keyword LIKE %?% ");
             stmt.setString(1, property);
             
             rs = stmt.executeQuery();
