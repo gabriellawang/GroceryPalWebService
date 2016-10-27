@@ -20,9 +20,9 @@ import org.json.JSONObject;
  */
 public class DealService {
     
-    //Given the String json input, this method searches either LOGO, Text, Label on Diffmarts
-    //Return the first result found in diffmarts, otherwise return a empty string.
-    public static String retrieveDiffMartsResult(String jsonInput){
+    //Given the String json input, this method searches either LOGO, Text, Label on Diffmarts, then use the diffMarts result to search in database
+    //Return the most relevant product name retrieved from crowd databse, otherwise return a empty string.
+    public static String retrieveProductNameByImage(String jsonInput){
         String resultToReturn = "";
         
         try{
@@ -86,28 +86,28 @@ public class DealService {
             }
 
             if(noResult){
-
+                // do nothing
             } else if(hasValidLogo){
                 // Search logo & text in diffMarts
                 String textStr = "";
                 for(String t : texts){
                     textStr = textStr + " " + t;
                 }
-                resultToReturn = DiffMartsCrawler.getFirstResultFor(logoName + textStr);
+                String diffMartResult = DiffMartsCrawler.getFirstResultFor(logoName + textStr);
+                String [] diffMartResultArr = diffMartResult.split(" ");
                 
-            } else {
-                //Todo  search labels in database
+                //Todo  search product name elements in database
                 ArrayList<Deal> deals = new ArrayList<Deal>();
                 ArrayList<Integer> ids = new ArrayList<Integer>();
-                for(String t : labels){
-                    deals = DealDAO.retrieveDealsByProperty(t);
+                for(String t : diffMartResultArr){
+                    deals = DealDAO.retrieveDealsByNameElement(t);
                     for(Deal d : deals){
                         ids.add(d.getDealId());
                     }
                 }
                 String[] idStrArr = (String[]) ids.toArray();
                 
-                //Get most relevant product 
+                //Get most relevant product from crowd database (search name elements)
                 int maxValue = 0;
                 String idStr = "";
                 Map<String,Integer> map = new HashMap<String, Integer>();  
@@ -129,7 +129,44 @@ public class DealService {
                     }
                 }
                 if(!idStr.isEmpty()){
-                    resultToReturn = DealDAO.retrieveDealById(Integer.parseInt(idStr)).getName();
+                    resultToReturn = DealDAO.retrieveDealsById(Integer.parseInt(idStr)).getName();
+                }
+                
+            } else {
+                // Search labels in database
+                ArrayList<Deal> deals = new ArrayList<Deal>();
+                ArrayList<Integer> ids = new ArrayList<Integer>();
+                for(String t : labels){
+                    deals = DealDAO.retrieveDealsByProperty(t);
+                    for(Deal d : deals){
+                        ids.add(d.getDealId());
+                    }
+                }
+                String[] idStrArr = (String[]) ids.toArray();
+                
+                //Get most relevant product (search labels)
+                int maxValue = 0;
+                String idStr = "";
+                Map<String,Integer> map = new HashMap<String, Integer>();  
+                for(int i =0 ;i<idStrArr.length;i++){  
+                    if(null!= map.get(idStrArr[i])){  
+                        map.put(idStrArr[i], map.get(idStrArr[i-1])+1); //value+1  
+                    }else{  
+                        map.put(idStrArr[i],1);  
+                    }  
+                }  
+                Iterator it = map.entrySet().iterator();    
+                while(it.hasNext()){  
+                    Map.Entry entry = (Map.Entry) it.next();     
+                    String  key  =  entry.getKey().toString();        
+                    int  value  =  Integer.parseInt(entry.getValue().toString());  
+                    if(value > maxValue){
+                        maxValue = value;
+                        idStr = key;
+                    }
+                }
+                if(!idStr.isEmpty()){
+                    resultToReturn = DealDAO.retrieveDealsById(Integer.parseInt(idStr)).getName();
                 }
             }
             
@@ -140,15 +177,51 @@ public class DealService {
         return resultToReturn;
     }
     
-    //Given diffmarts result, this method will retrieve relevant deals in local database
-    //Output is in Json format
-    public static String retrieveDeals(String diffMartsResult){
-        
-        return null;
+    //This method allows user to input a product name(split by whitespace)
+    //Return the most relevant product name retrieve from  crowd database. If not found any result it will return empty string
+    public static String retrieveProductNameByText(String text){
+        String resultToReturn = "";
+        //Todo  search product name elements in database
+        ArrayList<Deal> deals = new ArrayList<Deal>();
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        String[] textArr = text.split(" ");
+        for(String t : textArr){
+            deals = DealDAO.retrieveDealsByNameElement(t);
+            for(Deal d : deals){
+                ids.add(d.getDealId());
+            }
+        }
+        String[] idStrArr = (String[]) ids.toArray();
+
+        //Get most relevant product (search name elements)
+        int maxValue = 0;
+        String idStr = "";
+        Map<String,Integer> map = new HashMap<String, Integer>();  
+        for(int i =0 ;i<idStrArr.length;i++){  
+            if(null!= map.get(idStrArr[i])){  
+                map.put(idStrArr[i], map.get(idStrArr[i-1])+1); //value+1  
+            }else{  
+                map.put(idStrArr[i],1);  
+            }  
+        }  
+        Iterator it = map.entrySet().iterator();    
+        while(it.hasNext()){  
+            Map.Entry entry = (Map.Entry) it.next();     
+            String  key  =  entry.getKey().toString();        
+            int  value  =  Integer.parseInt(entry.getValue().toString());  
+            if(value > maxValue){
+                maxValue = value;
+                idStr = key;
+            }
+        }
+        if(!idStr.isEmpty()){
+            resultToReturn = DealDAO.retrieveDealsById(Integer.parseInt(idStr)).getName();
+        }
+        return resultToReturn;
     }
-    
+        
     public static void main(String [] args){
         String jsonInput = "{\"responses\":[{\"logoAnnotations\":[{\"mid\":\"/m/045c7b\",\"description\":\"pokka\",\"score\":0.85000956,\"boundingPoly\":{\"vertices\":[{\"x\":158,\"y\":50},{\"x\":515,\"y\":50},{\"x\":515,\"y\":156},{\"x\":158,\"y\":156}]}}],\"labelAnnotations\":[{\"mid\":\"/m/021sdg\",\"description\":\"pokka\",\"score\":0.87143095},{\"mid\":\"/m/0dgsmq8\",\"description\":\"artwork\",\"score\":0.86358012},{\"mid\":\"/m/0dwx7\",\"description\":\"logo\",\"score\":0.31318793},{\"mid\":\"/m/01mf0\",\"description\":\"software\",\"score\":0.23124418},{\"mid\":\"/m/03g09t\",\"description\":\"clip art\",\"score\":0.20368107},{\"mid\":\"/m/02ngh\",\"description\":\"emoticon\",\"score\":0.19831011},{\"mid\":\"/m/0h8npc5\",\"description\":\"digital content software\",\"score\":0.1769385},{\"mid\":\"/m/03tqj\",\"description\":\"icon\",\"score\":0.097528793},{\"mid\":\"/m/0hr95w1\",\"description\":\"pointer\",\"score\":0.03663468},{\"mid\":\"/m/0n0j\",\"description\":\"area\",\"score\":0.033584446}],\"textAnnotations\":[{\"locale\":\"en\",\"description\":\"Google\\n\",\"boundingPoly\":{\"vertices\":[{\"x\":61,\"y\":26},{\"x\":598,\"y\":26},{\"x\":598,\"y\":227},{\"x\":61,\"y\":227}]}}]}]}";
-        retrieveDiffMartsResult(jsonInput);
+        retrieveProductNameByImage(jsonInput);
     }
 }
