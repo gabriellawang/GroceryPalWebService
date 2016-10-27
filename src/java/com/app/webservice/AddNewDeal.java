@@ -8,8 +8,11 @@ package com.app.webservice;
 import com.app.DAO.DealDAO;
 import com.app.model.ConnectionManager;
 import com.app.model.Deal;
+import com.app.services.CloudVisionApi;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,7 +48,7 @@ public class AddNewDeal extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try {
             ServletContext context = request.getServletContext();
-            File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
+            //File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
 
             HashMap<String, String> map = retrieveFile(ConnectionManager.getDataDirectory(), request);
 
@@ -60,13 +63,12 @@ public class AddNewDeal extends HttpServlet {
             if (map.get("filename") != null) {
 
                 imgURL = "http://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath() + "/image?name=" + map.get("filename");
-                System.out.println("imgURL = " + imgURL);
+                //System.out.println("imgURL = " + imgURL);
             }
 
-            /*
-                something to be done for "LOCATION"!!!
-            */
-            Deal deal = new Deal(-1, name, brand, price, description, "Google Vision API",
+            Path p = Paths.get(imgURL);
+            String apiKeyword = CloudVisionApi.getLabels(p);
+            Deal deal = new Deal(-1, name, brand, price, description, apiKeyword,
                     imgURL, shop, location, deviceId, 0, 0);
             DealDAO.addDeal(deal);
         } catch (Throwable t) {
