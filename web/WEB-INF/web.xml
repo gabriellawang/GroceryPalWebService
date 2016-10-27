@@ -4,9 +4,65 @@
         <servlet-name>AddNewDeal</servlet-name>
         <servlet-class>com.app.webservice.AddNewDeal</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Image</servlet-name>
+        <servlet-class>com.app.webservice.Image</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchDeal</servlet-name>
+        <servlet-class>com.app.webservice.SearchDeal</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RetrieveDeal</servlet-name>
+        <servlet-class>com.app.webservice.RetrieveDeal</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DislikeVote</servlet-name>
+        <servlet-class>com.app.webservice.DislikeVote</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LikeVote</servlet-name>
+        <servlet-class>com.app.webservice.LikeVote</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmitReview</servlet-name>
+        <servlet-class>com.app.webservice.SubmitReview</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ResetDatebase</servlet-name>
+        <servlet-class>com.app.webservice.ResetDatebase</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AddNewDeal</servlet-name>
         <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Image</servlet-name>
+        <url-pattern>/image</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchDeal</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RetrieveDeal</servlet-name>
+        <url-pattern>/get-deals</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DislikeVote</servlet-name>
+        <url-pattern>/dislike</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LikeVote</servlet-name>
+        <url-pattern>/like</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitReview</servlet-name>
+        <url-pattern>/review</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResetDatebase</servlet-name>
+        <url-pattern>/reset</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -5,8 +5,11 @@
  */
 package com.app.model;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by JinYuan on 5/10/2016.
@@ -26,6 +29,7 @@ public class Deal {
     private String userDeviceId;
     private int likeCount;
     private int dislikeCount;
+    private int isVoted; // -1 means the current user never vote the deal.
 
     public Deal(int dealId, String name, String brand, double price, String description,
             String apiKeyword, String imgURL, String shop, String location,
@@ -43,6 +47,31 @@ public class Deal {
         this.userDeviceId = userDeviceId;
         this.likeCount = likeCount;
         this.dislikeCount = dislikeCount;
+        this.isVoted = -1;
+    }
+    
+    public Deal(int dealId, String name, String brand, double price, String description,
+            String apiKeyword, String imgURL, String shop, String location,
+            String dateCreated, String userDeviceId, int likeCount, int dislikeCount) {
+        this.dealId = dealId;
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.description = description;
+        this.apiKeyword = apiKeyword;
+        this.imgURL = imgURL;
+        this.shop = shop;
+        this.location = location;
+        this.userDeviceId = userDeviceId;
+        this.likeCount = likeCount;
+        this.dislikeCount = dislikeCount;
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        try {
+            this.dateCreated = format.parse(dateCreated);
+        } catch (ParseException ex) {
+            Logger.getLogger(Deal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.isVoted = -1;
     }
 
     public Deal(int dealId, String name, String brand, double price, String description,
@@ -61,6 +90,34 @@ public class Deal {
         this.userDeviceId = userDeviceId;
         this.likeCount = likeCount;
         this.dislikeCount = dislikeCount;
+        this.isVoted = -1;
+    }
+
+    public Deal(int dealId, String name, String brand, double price, String description, String apiKeyword, String imgURL, String shop, String location, String dateCreated, String userDeviceId, int likeCount, int dislikeCount, int isVoted) {
+        this.dealId = dealId;
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.description = description;
+        this.apiKeyword = apiKeyword;
+        this.imgURL = imgURL;
+        this.shop = shop;
+        this.location = location;
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        try {
+            this.dateCreated = format.parse(dateCreated);
+        } catch (ParseException ex) {
+            Logger.getLogger(Deal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.userDeviceId = userDeviceId;
+        this.likeCount = likeCount;
+        this.dislikeCount = dislikeCount;
+        this.isVoted = isVoted;
+    }
+    
+
+    public Deal(int dealId, String pName, String bName, double price, String shop, String location, String time, String imgDir, int like, int dislike, String deviceId, String keyword) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getDealId() {
@@ -113,6 +170,10 @@ public class Deal {
 
     public Date getDateCreated() {
         return dateCreated;
+    }
+
+    public int getIsVoted() {
+        return isVoted;
     }
 
     public void setLikeCount(int likeCount) {
