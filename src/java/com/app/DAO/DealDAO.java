@@ -122,10 +122,144 @@ public class DealDAO {
                 dList.add(d);
             }
             stmt.close();
-            conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dList;
+    }
+    
+    //This method allow user to search part product property(labels) to get Deal array that contains the partial product property
+    public static ArrayList<Deal> retrieveDealsByProperty(String property) {
+        Connection conn = null;
+        ArrayList<Deal> dList = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionManager.getConnection();
+            dList = new ArrayList<>();
+            
+            //I think the SQL statement is wrong.  PLS make it correct. 
+            stmt = conn.prepareStatement("SELECT * FROM deal WHERE api_keyword LIKE %?% ");
+            stmt.setString(1, property);
+            
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                int dealId = rs.getInt(1);
+                String pName = rs.getString(2);
+                String bName = rs.getString(3);
+                double price = rs.getDouble(4);
+                String shop = rs.getString(5);
+                String location = rs.getString(6);
+                String time = rs.getString(7);
+                String imgDir = rs.getString(8);
+                int like = rs.getInt(9);
+                int dislike = rs.getInt(10);
+                String deviceId = rs.getString(11);
+                String keyword = rs.getString(12);
+                String description = rs.getString(13);
+                int isLiked = rs.getInt(14);
+                if(rs.wasNull()){
+                    isLiked = -1;
+                }
+                Deal d = new Deal(dealId, pName, bName, price, description, keyword, 
+                        imgDir, shop, location, time, deviceId, like, dislike, isLiked);
+                dList.add(d);
+            }
+            //conn.commit();
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return dList;
+    }
+    
+    //This method allow user to search part product name to get Deal array that contains the partial product name
+    public static ArrayList<Deal> retrieveDealsByNameElement(String nameElement) {
+        Connection conn = null;
+        ArrayList<Deal> dList = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionManager.getConnection();
+            dList = new ArrayList<>();
+            
+            //I think the SQL statement is wrong.  PLS make it correct. 
+            stmt = conn.prepareStatement("SELECT * FROM deal WHERE api_keyword LIKE %?% ");
+            stmt.setString(1, nameElement);
+            
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                int dealId = rs.getInt(1);
+                String pName = rs.getString(2);
+                String bName = rs.getString(3);
+                double price = rs.getDouble(4);
+                String shop = rs.getString(5);
+                String location = rs.getString(6);
+                String time = rs.getString(7);
+                String imgDir = rs.getString(8);
+                int like = rs.getInt(9);
+                int dislike = rs.getInt(10);
+                String deviceId = rs.getString(11);
+                String keyword = rs.getString(12);
+                String description = rs.getString(13);
+                int isLiked = rs.getInt(14);
+                if(rs.wasNull()){
+                    isLiked = -1;
+                }
+                Deal d = new Deal(dealId, pName, bName, price, description, keyword, 
+                        imgDir, shop, location, time, deviceId, like, dislike, isLiked);
+                dList.add(d);
+            }
+            //conn.commit();
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return dList;
+    }
+    
+    public static Deal retrieveDealsById(int id) {
+        Connection conn = null;
+        ArrayList<Deal> dList = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Deal d = null;
+        try {
+            conn = ConnectionManager.getConnection();
+            dList = new ArrayList<>();
+            //conn.setAutoCommit(false);
+            //I think the SQL statement is wrong.  PLS make it correct. 
+            stmt = conn.prepareStatement("SELECT * FROM deal WHERE id = ? ");
+            stmt.setInt(1, id);
+            
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                int dealId = rs.getInt(1);
+                String pName = rs.getString(2);
+                String bName = rs.getString(3);
+                double price = rs.getDouble(4);
+                String shop = rs.getString(5);
+                String location = rs.getString(6);
+                String time = rs.getString(7);
+                String imgDir = rs.getString(8);
+                int like = rs.getInt(9);
+                int dislike = rs.getInt(10);
+                String deviceId = rs.getString(11);
+                String keyword = rs.getString(12);
+                String description = rs.getString(13);
+                int isLiked = rs.getInt(14);
+                if(rs.wasNull()){
+                    isLiked = -1;
+                }
+                d = new Deal(dealId, pName, bName, price, description, keyword, 
+                        imgDir, shop, location, time, deviceId, like, dislike, isLiked);
+                
+            }
+            conn.commit();
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return d;
     }
 }

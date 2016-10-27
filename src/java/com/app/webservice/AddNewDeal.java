@@ -8,11 +8,8 @@ package com.app.webservice;
 import com.app.DAO.DealDAO;
 import com.app.model.ConnectionManager;
 import com.app.model.Deal;
-import com.app.services.CloudVisionApi;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,12 +60,13 @@ public class AddNewDeal extends HttpServlet {
             if (map.get("filename") != null) {
 
                 imgURL = "http://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath() + "/image?name=" + map.get("filename");
-                //System.out.println("imgURL = " + imgURL);
+                System.out.println("imgURL = " + imgURL);
             }
 
-            Path p = Paths.get(imgURL);
-            String apiKeyword = CloudVisionApi.getLabels(p);
-            Deal deal = new Deal(-1, name, brand, price, description, apiKeyword,
+            /*
+                something to be done for "LOCATION"!!!
+            */
+            Deal deal = new Deal(-1, name, brand, price, description, "Google Vision API",
                     imgURL, shop, location, deviceId, 0, 0);
             DealDAO.addDeal(deal);
         } catch (Throwable t) {
