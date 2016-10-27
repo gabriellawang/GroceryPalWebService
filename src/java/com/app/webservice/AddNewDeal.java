@@ -45,7 +45,7 @@ public class AddNewDeal extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try {
             ServletContext context = request.getServletContext();
-            //File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
+            File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
 
             HashMap<String, String> map = retrieveFile(ConnectionManager.getDataDirectory(), request);
 

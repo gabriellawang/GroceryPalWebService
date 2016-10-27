@@ -20,10 +20,17 @@ import org.json.JSONObject;
  */
 public class DealService {
     
+<<<<<<< HEAD
     //Given the String json input, this method searches either LOGO, Text, Label on Diffmarts, then use the diffMarts result to search in database
     //Return the most relevant product name retrieved from crowd databse, otherwise return a empty string.
     public static String retrieveProductNameByImage(String jsonInput){
         String resultToReturn = "";
+=======
+    //Given the String json input, this method searches either LOGO, Text, Label on Diffmarts
+    //Return the first result found in diffmarts, otherwise return a empty string.
+    public static String retrieveDiffMartsResult(String jsonInput){
+        String diffMartsResult = "";
+>>>>>>> parent of 250f082... store vision api result into db
         
         try{
             JSONObject jb = new JSONObject(jsonInput);
@@ -86,13 +93,18 @@ public class DealService {
             }
 
             if(noResult){
+<<<<<<< HEAD
                 // do nothing
+=======
+
+>>>>>>> parent of 250f082... store vision api result into db
             } else if(hasValidLogo){
                 // Search logo & text in diffMarts
                 String textStr = "";
                 for(String t : texts){
                     textStr = textStr + " " + t;
                 }
+<<<<<<< HEAD
                 String diffMartResult = DiffMartsCrawler.getFirstResultFor(logoName + textStr);
                 String [] diffMartResultArr = diffMartResult.split(" ");
                 
@@ -167,6 +179,15 @@ public class DealService {
                 }
                 if(!idStr.isEmpty()){
                     resultToReturn = DealDAO.retrieveDealsById(Integer.parseInt(idStr)).getName();
+=======
+                diffMartsResult = DiffMartsCrawler.getFirstResultFor(logoName + textStr);
+                
+            } else {
+                // Search labels in diffMarts
+                String textStr = "";
+                for(String t : labels){
+                    textStr += t + " ";
+>>>>>>> parent of 250f082... store vision api result into db
                 }
             }
             
@@ -174,6 +195,7 @@ public class DealService {
             System.out.println(e.getMessage());
         }
         
+<<<<<<< HEAD
         return resultToReturn;
     }
     
@@ -224,4 +246,20 @@ public class DealService {
         String jsonInput = "{\"responses\":[{\"logoAnnotations\":[{\"mid\":\"/m/045c7b\",\"description\":\"pokka\",\"score\":0.85000956,\"boundingPoly\":{\"vertices\":[{\"x\":158,\"y\":50},{\"x\":515,\"y\":50},{\"x\":515,\"y\":156},{\"x\":158,\"y\":156}]}}],\"labelAnnotations\":[{\"mid\":\"/m/021sdg\",\"description\":\"pokka\",\"score\":0.87143095},{\"mid\":\"/m/0dgsmq8\",\"description\":\"artwork\",\"score\":0.86358012},{\"mid\":\"/m/0dwx7\",\"description\":\"logo\",\"score\":0.31318793},{\"mid\":\"/m/01mf0\",\"description\":\"software\",\"score\":0.23124418},{\"mid\":\"/m/03g09t\",\"description\":\"clip art\",\"score\":0.20368107},{\"mid\":\"/m/02ngh\",\"description\":\"emoticon\",\"score\":0.19831011},{\"mid\":\"/m/0h8npc5\",\"description\":\"digital content software\",\"score\":0.1769385},{\"mid\":\"/m/03tqj\",\"description\":\"icon\",\"score\":0.097528793},{\"mid\":\"/m/0hr95w1\",\"description\":\"pointer\",\"score\":0.03663468},{\"mid\":\"/m/0n0j\",\"description\":\"area\",\"score\":0.033584446}],\"textAnnotations\":[{\"locale\":\"en\",\"description\":\"Google\\n\",\"boundingPoly\":{\"vertices\":[{\"x\":61,\"y\":26},{\"x\":598,\"y\":26},{\"x\":598,\"y\":227},{\"x\":61,\"y\":227}]}}]}]}";
         retrieveProductNameByImage(jsonInput);
     }
+=======
+        return diffMartsResult;
+    }
+    
+    //Given diffmarts result, this method will retrieve relevant deals in local database
+    //Output is in Json format
+    public static String retrieveDeals(String diffMartsResult){
+        
+        return null;
+    }
+    
+    public static void main(String [] args){
+        String jsonInput = "{\"responses\":[{\"logoAnnotations\":[{\"mid\":\"/m/045c7b\",\"description\":\"pokka\",\"score\":0.85000956,\"boundingPoly\":{\"vertices\":[{\"x\":158,\"y\":50},{\"x\":515,\"y\":50},{\"x\":515,\"y\":156},{\"x\":158,\"y\":156}]}}],\"labelAnnotations\":[{\"mid\":\"/m/021sdg\",\"description\":\"pokka\",\"score\":0.87143095},{\"mid\":\"/m/0dgsmq8\",\"description\":\"artwork\",\"score\":0.86358012},{\"mid\":\"/m/0dwx7\",\"description\":\"logo\",\"score\":0.31318793},{\"mid\":\"/m/01mf0\",\"description\":\"software\",\"score\":0.23124418},{\"mid\":\"/m/03g09t\",\"description\":\"clip art\",\"score\":0.20368107},{\"mid\":\"/m/02ngh\",\"description\":\"emoticon\",\"score\":0.19831011},{\"mid\":\"/m/0h8npc5\",\"description\":\"digital content software\",\"score\":0.1769385},{\"mid\":\"/m/03tqj\",\"description\":\"icon\",\"score\":0.097528793},{\"mid\":\"/m/0hr95w1\",\"description\":\"pointer\",\"score\":0.03663468},{\"mid\":\"/m/0n0j\",\"description\":\"area\",\"score\":0.033584446}],\"textAnnotations\":[{\"locale\":\"en\",\"description\":\"Google\\n\",\"boundingPoly\":{\"vertices\":[{\"x\":61,\"y\":26},{\"x\":598,\"y\":26},{\"x\":598,\"y\":227},{\"x\":61,\"y\":227}]}}]}]}";
+        retrieveDiffMartsResult(jsonInput);
+    }
+>>>>>>> parent of 250f082... store vision api result into db
 }
