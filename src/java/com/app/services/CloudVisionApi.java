@@ -15,7 +15,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import org.apache.commons.codec.binary.Base64;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 
@@ -31,8 +34,9 @@ public class CloudVisionApi {
         File f = new File(dir,"demo.jpg");
         Path p = f.toPath();
         
-        String results = callCloudVision(p);
-        System.out.println(results);
+        //String results = callCloudVision(p);
+        //ArrayList<String> results = getLabels(p);
+        //System.out.println(results);
     }
     // Takes in path to image (Using File.toPath())
     // returns result from GoogleCloudVisionAPI as String in JSON format
@@ -100,5 +104,28 @@ public class CloudVisionApi {
 	}
         return results;
     }
+    // Given an image, returns an ArrayList<String> labels
+    public static ArrayList<String> getLabels(Path imagePath) {
+        ArrayList<String> labels = new ArrayList<String>();
+        String jsonInput = callCloudVision(imagePath);
+        try{
+            JSONObject jb = new JSONObject(jsonInput);
+            JSONObject jbResponse = jb.getJSONArray("responses").getJSONObject(0);
 
+            boolean hasLabelAnnotations = jbResponse.has("labelAnnotations");
+
+            if(hasLabelAnnotations){
+                JSONArray jbArray_labelAnnotations = jbResponse.getJSONArray("labelAnnotations"); 
+                for(int i = 0 ; i < jbArray_labelAnnotations.length() ; i++){
+                    JSONObject jbLabel = jbArray_labelAnnotations.getJSONObject(i);
+                    String label = jbLabel.getString("description");
+                    labels.add(label);
+                }
+            } 
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        
+        return labels;
+    }
 }
