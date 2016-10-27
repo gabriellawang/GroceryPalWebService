@@ -122,11 +122,13 @@ public class DealDAO {
                 dList.add(d);
             }
             stmt.close();
+            conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dList;
     }
+
     
     //This method allow user to search part product property(labels) to get Deal array that contains the partial product property
     public static ArrayList<Deal> retrieveDealsByProperty(String property) {

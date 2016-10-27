@@ -5,19 +5,13 @@
  */
 package com.app.webservice;
 
-import com.app.model.Deal;
 import com.app.services.CloudVisionApi;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,51 +49,20 @@ public class SearchDeal extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             ServletContext context = request.getServletContext();
             File repository = (File) context.getAttribute(ServletContext.TEMPDIR);
-            
-            ArrayList<Deal> dList = new ArrayList<>();
-            
+
             if (request.getContentType() != null && request.getContentType().equalsIgnoreCase("multipart/form-data;")) {
                 HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);
                 String imgURL = "";
+                String searchKeyword = map.get("keyword");
 
                 //user wants to search by photo
                 imgURL = "http://" + request.getServerName() + ":" + request.getServerPort() + context.getContextPath() + "/image?name=" + map.get("filename");
                 Path p = Paths.get(imgURL);
-                //CloudVisionApi.callCloudVision(p);
+                out.println(CloudVisionApi.callCloudVision(p));
             } else {
                 //user wants to search by keyword
                 String searchKeyword = request.getParameter("keyword");
                 out.println("search by text: " + searchKeyword);
-            }
-            
-            Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-            JsonObject jsonOutput = new JsonObject();
-            
-            JsonArray dealArray = new JsonArray();
-            for (int i = 0; i < dList.size(); i++) {
-                Deal d = dList.get(i);
-                JsonObject dObject = new JsonObject();
-                dObject.addProperty("deal_id", d.getDealId());
-                dObject.addProperty("product_name", d.getName());
-                dObject.addProperty("brand_name", d.getBrand());
-                dObject.addProperty("price", d.getPrice());
-                dObject.addProperty("shop", d.getShop());
-                dObject.addProperty("location", d.getLocation());
-                dObject.addProperty("time", d.getDateString());
-                dObject.addProperty("img_dir", d.getImgURL());
-                dObject.addProperty("like_count", d.getLikeCount());
-                dObject.addProperty("dislike_count", d.getDislikeCount());
-                dObject.addProperty("device_id", d.getUserDeviceId());
-                dObject.addProperty("api_keyword", d.getApiKeyword());
-                dObject.addProperty("description", d.getDescription());
-                //dObject.addProperty("is_voted", d.getIsVoted());
-                dealArray.add(dObject);
-            }
-            jsonOutput.add("deals", dealArray);
-            try {
-                out.println(gson.toJson(jsonOutput));
-            } finally {
-                out.close();
             }
         }
     }

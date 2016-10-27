@@ -20,24 +20,12 @@ import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-
-
-
-
 /**
  *
  * @author Ivan
  */
 public class CloudVisionApi {
-    
-    
-    public static void main(String[] args) {
-        String dir = System.getProperty("user.dir");
-        File f = new File(dir,"demo.jpg");
-        Path p = f.toPath();
-        
 
-    }
     // Takes in path to image (Using File.toPath())
     // returns result from GoogleCloudVisionAPI as String in JSON format
     // KEY uses Ivan's account. Do not exceed 1000 calls/mth
@@ -106,27 +94,34 @@ public class CloudVisionApi {
     }
 
     // Given an image, returns an ArrayList<String> labels
-    public static ArrayList<String> getLabels(Path imagePath) {
-        ArrayList<String> labels = new ArrayList<String>();
+
+
+    public static String getLabels(Path imagePath) {
+        //ArrayList<String> labels = new ArrayList<String>();
+        String labels = "";
         String jsonInput = callCloudVision(imagePath);
-        try{
+        try {
+
             JSONObject jb = new JSONObject(jsonInput);
             JSONObject jbResponse = jb.getJSONArray("responses").getJSONObject(0);
 
             boolean hasLabelAnnotations = jbResponse.has("labelAnnotations");
 
-            if(hasLabelAnnotations){
-                JSONArray jbArray_labelAnnotations = jbResponse.getJSONArray("labelAnnotations"); 
-                for(int i = 0 ; i < jbArray_labelAnnotations.length() ; i++){
+
+            if (hasLabelAnnotations) {
+                JSONArray jbArray_labelAnnotations = jbResponse.getJSONArray("labelAnnotations");
+                for (int i = 0; i < jbArray_labelAnnotations.length(); i++) {
                     JSONObject jbLabel = jbArray_labelAnnotations.getJSONObject(i);
                     String label = jbLabel.getString("description");
-                    labels.add(label);
+                    //labels.add(label);
+                    labels = labels + label + ",";
                 }
-            } 
-        } catch (Exception e){
+            }
+            labels = labels.substring(1, labels.length() - 1); // remove the last comma
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
+
         return labels;
     }
 
