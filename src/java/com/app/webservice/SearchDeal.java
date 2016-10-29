@@ -67,11 +67,13 @@ public class SearchDeal extends HttpServlet {
                 //user wants to search by photo
                 Path p = Paths.get(repository.getAbsolutePath()+File.separatorChar+map.get("filename"));
                 String jsonOutput = CloudVisionApi.callCloudVision(p);
-                result = DealService.retrieveProductNameByImage(udid, jsonOutput);
+                //System.out.println(jsonOutput);
+                result = DealService.retrieveProductNameByImage(jsonOutput, udid);
+                //System.out.println(result.size());
             } else {
                 //user wants to search by keyword
                 String searchKeyword = request.getParameter("keyword");
-                System.out.println(searchKeyword);
+                //System.out.println(searchKeyword);
                 result = DealService.retrieveProductNameByText(udid, searchKeyword);
             }
             

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>GroceryPal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action="http://localhost:8080/GroceryPalWebService/search" method="post" enctype="multipart/form-data">
+            <p><input type="file" name="filename">
+                <input type="text" name="udid" value="3b2f13e725b8f04f">
+            <p><button type="submit">Submit</button>
+        </form>
+        
+        <br>
+        Online version:<br>
+        <form action="http://grocerypal-shuwei.rhcloud.com/search" method="post" enctype="multipart/form-data">
+            <p><input type="file" name="filename">
+                <input type="text" name="udid" value="3b2f13e725b8f04f">
+            <p><button type="submit">Submit</button>
+        </form>
+    </body>
+</html>

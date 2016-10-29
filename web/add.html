@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action="http://localhost:8080/GroceryPalWebService/upload" method="post" enctype="multipart/form-data">
+            <p><input type="file" name="filename"><br>
+                name: <input type="text" name="name"><br>
+                shop: <input type="text" name="shop" value="Fair Price"><br>
+                brand: <input type="text" name="brand"><br>
+                price: <input type="text" name="price"><br>
+                description: <input type="text" name="description"><br>
+                location: <input type="text" name="location" value="1.3051175038109595,103.86384953832882"><br>
+                udid: <input type="text" name="udid" value="3b2f13e725b8f04f"><br>
+            <p><button type="submit">Submit</button>
+        </form>
+        
+        <br>
+        Online version:<br>
+        <form action="http://grocerypal-shuwei.rhcloud.com/upload" method="post" enctype="multipart/form-data">
+            <p><input type="file" name="filename"><br>
+                name: <input type="text" name="name"><br>
+                shop: <input type="text" name="shop" value="Fair Price"><br>
+                brand: <input type="text" name="brand"><br>
+                price: <input type="text" name="price"><br>
+                description: <input type="text" name="description"><br>
+                location: <input type="text" name="location" value="1.3051175038109595,103.86384953832882"><br>
+                udid: <input type="text" name="udid" value="3b2f13e725b8f04f"><br>
+            <p><button type="submit">Submit</button>
+        </form>
+    </body>
+</html>

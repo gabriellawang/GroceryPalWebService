@@ -33,7 +33,7 @@ public class DealService {
         try {
             JSONObject jb = new JSONObject(jsonInput);
             JSONObject jbResponse = jb.getJSONArray("responses").getJSONObject(0);
-
+            
             boolean hasLogoAnnotations = jbResponse.has("logoAnnotations");
             boolean hasTextAnnotations = jbResponse.has("textAnnotations");
             boolean hasLabelAnnotations = jbResponse.has("labelAnnotations");
@@ -89,11 +89,13 @@ public class DealService {
                     noResult = true;
                 }
             }
-
+            
             HashMap<Integer, Deal> idDealMap = new HashMap<>();
             if (noResult) {
+                //System.out.println("There is no result!");
                 // do nothing
             } else if (hasValidLogo) {
+                //System.out.println("There is result!");
                 // Search logo & text in diffMarts
                 String textStr = "";
                 for (String t : texts) {
@@ -161,6 +163,7 @@ public class DealService {
 
             } else {
                 // Search labels in database
+                //System.out.println("hello?????");
                 ArrayList<Deal> deals = new ArrayList<Deal>();
                 ArrayList<Integer> ids = new ArrayList<Integer>();
                 for (String t : labels) {
@@ -170,6 +173,7 @@ public class DealService {
                         idDealMap.put(d.getDealId(), d);
                     }
                 }
+                //System.out.println(deals.size());
                 Object[] idArr = ids.toArray();
                 String[] idStrArr = new String[idArr.length];
                 for (int i = 0; i < idArr.length; i++) {
