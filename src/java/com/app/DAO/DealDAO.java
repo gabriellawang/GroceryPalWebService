@@ -129,7 +129,6 @@ public class DealDAO {
         return dList;
     }
 
-    
     //This method allow user to search part product property(labels) to get Deal array that contains the partial product property
     public static ArrayList<Deal> retrieveDealsByProperty(String property) {
         Connection conn = null;
@@ -139,11 +138,10 @@ public class DealDAO {
         try {
             conn = ConnectionManager.getConnection();
             dList = new ArrayList<>();
-            
-            //I think the SQL statement is wrong.  PLS make it correct. 
+
             stmt = conn.prepareStatement("SELECT * FROM deal WHERE api_keyword LIKE %?% ");
             stmt.setString(1, property);
-            
+
             rs = stmt.executeQuery();
             while (rs.next()) {
                 int dealId = rs.getInt(1);
@@ -160,10 +158,10 @@ public class DealDAO {
                 String keyword = rs.getString(12);
                 String description = rs.getString(13);
                 int isLiked = rs.getInt(14);
-                if(rs.wasNull()){
+                if (rs.wasNull()) {
                     isLiked = -1;
                 }
-                Deal d = new Deal(dealId, pName, bName, price, description, keyword, 
+                Deal d = new Deal(dealId, pName, bName, price, description, keyword,
                         imgDir, shop, location, time, deviceId, like, dislike, isLiked);
                 dList.add(d);
             }
@@ -174,7 +172,7 @@ public class DealDAO {
         }
         return dList;
     }
-    
+
     //This method allow user to search part product name to get Deal array that contains the partial product name
     public static ArrayList<Deal> retrieveDealsByNameElement(String nameElement) {
         Connection conn = null;
@@ -184,12 +182,11 @@ public class DealDAO {
         try {
             conn = ConnectionManager.getConnection();
             dList = new ArrayList<>();
-            
-            //I think the SQL statement is wrong.  PLS make it correct. 
+
             stmt = conn.prepareStatement("SELECT * FROM deal WHERE product_name LIKE %?% or brand_name LIKE %?%");
             stmt.setString(1, nameElement);
             stmt.setString(2, nameElement);
-            
+
             rs = stmt.executeQuery();
             while (rs.next()) {
                 int dealId = rs.getInt(1);
@@ -206,21 +203,20 @@ public class DealDAO {
                 String keyword = rs.getString(12);
                 String description = rs.getString(13);
                 int isLiked = rs.getInt(14);
-                if(rs.wasNull()){
+                if (rs.wasNull()) {
                     isLiked = -1;
                 }
-                Deal d = new Deal(dealId, pName, bName, price, description, keyword, 
+                Deal d = new Deal(dealId, pName, bName, price, description, keyword,
                         imgDir, shop, location, time, deviceId, like, dislike, isLiked);
                 dList.add(d);
             }
-            //conn.commit();
             stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(DealDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return dList;
     }
-    
+
     public static Deal retrieveDealsById(int id) {
         Connection conn = null;
         ArrayList<Deal> dList = null;
@@ -234,7 +230,7 @@ public class DealDAO {
             //I think the SQL statement is wrong.  PLS make it correct. 
             stmt = conn.prepareStatement("SELECT * FROM deal WHERE id = ? ");
             stmt.setInt(1, id);
-            
+
             rs = stmt.executeQuery();
             while (rs.next()) {
                 int dealId = rs.getInt(1);
@@ -251,12 +247,12 @@ public class DealDAO {
                 String keyword = rs.getString(12);
                 String description = rs.getString(13);
                 int isLiked = rs.getInt(14);
-                if(rs.wasNull()){
+                if (rs.wasNull()) {
                     isLiked = -1;
                 }
-                d = new Deal(dealId, pName, bName, price, description, keyword, 
+                d = new Deal(dealId, pName, bName, price, description, keyword,
                         imgDir, shop, location, time, deviceId, like, dislike, isLiked);
-                
+
             }
             conn.commit();
             stmt.close();
