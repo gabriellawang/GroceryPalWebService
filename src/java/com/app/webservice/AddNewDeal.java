@@ -65,8 +65,9 @@ public class AddNewDeal extends HttpServlet {
                 //System.out.println("imgURL = " + imgURL);
             }
 
-            Path p = Paths.get(imgURL);
+            Path p = Paths.get(ConnectionManager.getDataDirectory()+map.get("filename"));
             String apiKeyword = CloudVisionApi.getLabels(p);
+            System.out.println("apiKeyword = "+apiKeyword);
             Deal deal = new Deal(-1, name, brand, price, description, apiKeyword,
                     imgURL, shop, location, deviceId, 0, 0);
             DealDAO.addDeal(deal);

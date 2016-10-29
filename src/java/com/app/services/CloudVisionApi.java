@@ -112,7 +112,7 @@ public class CloudVisionApi {
                     labels = labels + label + ",";
                 }
             }
-            labels = labels.substring(1, labels.length() - 1); // remove the last comma
+            labels = labels.substring(0, labels.length() - 1); // remove the last comma
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
