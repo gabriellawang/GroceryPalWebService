@@ -130,7 +130,7 @@ public class DealDAO {
     }
 
     //This method allow user to search part product property(labels) to get Deal array that contains the partial product property
-    public static ArrayList<Deal> retrieveDealsByProperty(String property) {
+    public static ArrayList<Deal> retrieveDealsByProperty(String udid, String property) {
         Connection conn = null;
         ArrayList<Deal> dList = null;
         PreparedStatement stmt = null;
@@ -139,8 +139,11 @@ public class DealDAO {
             conn = ConnectionManager.getConnection();
             dList = new ArrayList<>();
 
-            stmt = conn.prepareStatement("SELECT * FROM deal WHERE api_keyword LIKE %?% ");
-            stmt.setString(1, property);
+            stmt = conn.prepareStatement("SELECT deal.*, vote.is_like FROM grocerypal.deal "
+                    + "left join grocerypal.vote on vote.device_id=? and deal.deal_id=vote.deal_id "
+                    + "WHERE deal.api_keyword LIKE ? ");
+            stmt.setString(1, udid);
+            stmt.setString(2, "%" + property + "%");
 
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -174,7 +177,7 @@ public class DealDAO {
     }
 
     //This method allow user to search part product name to get Deal array that contains the partial product name
-    public static ArrayList<Deal> retrieveDealsByNameElement(String nameElement) {
+    public static ArrayList<Deal> retrieveDealsByNameElement(String udid, String nameElement) {
         Connection conn = null;
         ArrayList<Deal> dList = null;
         PreparedStatement stmt = null;
@@ -182,10 +185,15 @@ public class DealDAO {
         try {
             conn = ConnectionManager.getConnection();
             dList = new ArrayList<>();
+            nameElement = "%" + nameElement + "%";
 
-            stmt = conn.prepareStatement("SELECT * FROM deal WHERE product_name LIKE %?% or brand_name LIKE %?%");
-            stmt.setString(1, nameElement);
+            stmt = conn.prepareStatement("SELECT deal.*, vote.is_like FROM grocerypal.deal "
+                    + "left join grocerypal.vote on vote.device_id=? and deal.deal_id=vote.deal_id "
+                    + "WHERE product_name LIKE ? or brand_name LIKE ?");
+            
+            stmt.setString(1, udid);
             stmt.setString(2, nameElement);
+            stmt.setString(3, nameElement);
 
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -217,6 +225,7 @@ public class DealDAO {
         return dList;
     }
 
+    /*
     public static Deal retrieveDealsById(int id) {
         Connection conn = null;
         ArrayList<Deal> dList = null;
@@ -228,7 +237,7 @@ public class DealDAO {
             dList = new ArrayList<>();
             //conn.setAutoCommit(false);
             //I think the SQL statement is wrong.  PLS make it correct. 
-            stmt = conn.prepareStatement("SELECT * FROM deal WHERE id = ? ");
+            stmt = conn.prepareStatement("SELECT * FROM deal WHERE deal_id = ? ");
             stmt.setInt(1, id);
 
             rs = stmt.executeQuery();
@@ -261,4 +270,5 @@ public class DealDAO {
         }
         return d;
     }
+    */
 }
