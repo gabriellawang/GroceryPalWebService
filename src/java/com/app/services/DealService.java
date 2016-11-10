@@ -168,6 +168,7 @@ public class DealService {
                 ArrayList<Integer> ids = new ArrayList<Integer>();
                 for (String t : labels) {
                     deals = DealDAO.retrieveDealsByProperty(udid, t);
+                    System.out.println("DealService.java " + udid);
                     for (Deal d : deals) {
                         ids.add(d.getDealId());
                         idDealMap.put(d.getDealId(), d);
@@ -222,22 +223,6 @@ public class DealService {
                     resultList.add(d);
                 }
 
-                /*
-                 Iterator it = map.entrySet().iterator();
-                 while (it.hasNext()) {
-                 Map.Entry entry = (Map.Entry) it.next();
-                 String key = entry.getKey().toString();
-                 int value = Integer.parseInt(entry.getValue().toString());
-                 if (value > maxValue) {
-                 maxValue = value;
-                 idStr = key;
-                 }
-                 }
-                
-                 if (!idStr.isEmpty()) {
-                 resultList.add(DealDAO.retrieveDealsById(Integer.parseInt(idStr)));
-                 }
-                 */
             }
 
         } catch (Exception e) {
