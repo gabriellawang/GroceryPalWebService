@@ -36,8 +36,8 @@ public class DealService {
             JSONObject jb = new JSONObject(jsonInput);
             JSONObject jbResponse = jb.getJSONArray("responses").getJSONObject(0);
             
-            Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-            System.out.println(gson.toJson(jb));
+            //Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+            //System.out.println(gson.toJson(jb));
             
             boolean hasLogoAnnotations = jbResponse.has("logoAnnotations");
             boolean hasTextAnnotations = jbResponse.has("textAnnotations");
@@ -56,7 +56,7 @@ public class DealService {
                 double score = jbArray_logoAnnotations.getJSONObject(0).getDouble("score");
                 if (score >= 0.5) {
                     logoName = jbArray_logoAnnotations.getJSONObject(0).getString("description");
-                    System.out.println("Have valid LOGO!!!!!" + logoName);
+                    //System.out.println("Have valid LOGO!!!!!" + logoName);
                     hasValidLogo = true;
                 }
             }
