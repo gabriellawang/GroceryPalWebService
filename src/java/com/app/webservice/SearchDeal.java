@@ -5,7 +5,6 @@
  */
 package com.app.webservice;
 
-import com.app.model.ConnectionManager;
 import com.app.model.Deal;
 import com.app.services.CloudVisionApi;
 import com.app.services.DealService;
@@ -61,15 +60,15 @@ public class SearchDeal extends HttpServlet {
             String udid = request.getParameter("udid");
             if (request.getContentType() != null && request.getContentType().contains("multipart/form-data;")) {
                 HashMap<String, String> map = retrieveFile(repository.getAbsolutePath(), request);
-                String imgURL = "";
-                String searchKeyword = map.get("keyword");
+                //String imgURL = "";
+                //String searchKeyword = map.get("keyword");
                 udid = map.get("udid");
                 //user wants to search by photo
                 Path p = Paths.get(repository.getAbsolutePath()+File.separatorChar+map.get("filename"));
                 String jsonOutput = CloudVisionApi.callCloudVision(p);
                 //System.out.println(jsonOutput);
                 result = DealService.retrieveProductNameByImage(jsonOutput, udid);
-                System.out.println(udid);
+                //System.out.println(udid);
             } else {
                 //user wants to search by keyword
                 String searchKeyword = request.getParameter("keyword");

@@ -67,7 +67,8 @@ public class ConnectionManager {
       String dbName = props.getProperty("db.name");
       dbUser = props.getProperty("db.user");
       dbPassword = props.getProperty("db.password");
-      dataDir = "";
+      dataDir = "/Users/gabriellawang/GitHub/GroceryPalWebService/data/";
+      //dataDir = "data/";
 
       dbURL = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
     } catch (Exception ex) {

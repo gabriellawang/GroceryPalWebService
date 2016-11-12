@@ -78,6 +78,7 @@ public class RetrieveDeal extends HttpServlet {
 
             try {
                 out.println(gson.toJson(jsonOutput));
+                System.out.println(gson.toJson(jsonOutput));
             } finally {
                 out.close();
             }
