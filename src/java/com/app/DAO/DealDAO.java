@@ -144,7 +144,7 @@ public class DealDAO {
                     + "WHERE deal.api_keyword LIKE ? ");
             stmt.setString(1, udid);
             stmt.setString(2, "%" + property + "%");
-            System.out.println(stmt);
+
             rs = stmt.executeQuery();
             while (rs.next()) {
                 int dealId = rs.getInt(1);

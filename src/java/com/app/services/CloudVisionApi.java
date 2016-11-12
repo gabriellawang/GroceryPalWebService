@@ -52,7 +52,7 @@ public class CloudVisionApi {
                     + "          \"type\": \"LABEL_DETECTION\"\n"
                     + "        },\n"
                     + "        {\n"
-                    + "          \"type\": \"LABEL_DETECTION\"\n"
+                    + "          \"type\": \"LOGO_DETECTION\"\n"
                     + "        },\n"
                     + "        {\n"
                     + "          \"type\": \"TEXT_DETECTION\"\n"

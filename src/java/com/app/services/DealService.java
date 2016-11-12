@@ -7,6 +7,8 @@ package com.app.services;
 
 import com.app.DAO.DealDAO;
 import com.app.model.Deal;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +36,9 @@ public class DealService {
             JSONObject jb = new JSONObject(jsonInput);
             JSONObject jbResponse = jb.getJSONArray("responses").getJSONObject(0);
             
+            Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+            System.out.println(gson.toJson(jb));
+            
             boolean hasLogoAnnotations = jbResponse.has("logoAnnotations");
             boolean hasTextAnnotations = jbResponse.has("textAnnotations");
             boolean hasLabelAnnotations = jbResponse.has("labelAnnotations");
@@ -51,6 +56,7 @@ public class DealService {
                 double score = jbArray_logoAnnotations.getJSONObject(0).getDouble("score");
                 if (score >= 0.5) {
                     logoName = jbArray_logoAnnotations.getJSONObject(0).getString("description");
+                    System.out.println("Have valid LOGO!!!!!" + logoName);
                     hasValidLogo = true;
                 }
             }
@@ -297,69 +303,7 @@ public class DealService {
             resultList.add(d);
         }
 
-        /*
-         Iterator it = map.entrySet().iterator();
-         while (it.hasNext()) {
-         Map.Entry entry = (Map.Entry) it.next();
-         String key = entry.getKey().toString();
-         int value = Integer.parseInt(entry.getValue().toString());
-         if (value > maxValue) {
-         maxValue = value;
-         idStr = key;
-         }
-         }
-         if (!idStr.isEmpty()) {
-         //resultToReturn = DealDAO.retrieveDealsById(Integer.parseInt(idStr)).getName();
-         resultList.add(DealDAO.retrieveDealsById(Integer.parseInt(idStr)));
-         }
-         */
         return resultList;
     }
 
-    /*
-     public static void main(String[] args) {
-     //String jsonInput = "{\"responses\":[{\"logoAnnotations\":[{\"mid\":\"/m/045c7b\",\"description\":\"pokka\",\"score\":0.85000956,\"boundingPoly\":{\"vertices\":[{\"x\":158,\"y\":50},{\"x\":515,\"y\":50},{\"x\":515,\"y\":156},{\"x\":158,\"y\":156}]}}],\"labelAnnotations\":[{\"mid\":\"/m/021sdg\",\"description\":\"pokka\",\"score\":0.87143095},{\"mid\":\"/m/0dgsmq8\",\"description\":\"artwork\",\"score\":0.86358012},{\"mid\":\"/m/0dwx7\",\"description\":\"logo\",\"score\":0.31318793},{\"mid\":\"/m/01mf0\",\"description\":\"software\",\"score\":0.23124418},{\"mid\":\"/m/03g09t\",\"description\":\"clip art\",\"score\":0.20368107},{\"mid\":\"/m/02ngh\",\"description\":\"emoticon\",\"score\":0.19831011},{\"mid\":\"/m/0h8npc5\",\"description\":\"digital content software\",\"score\":0.1769385},{\"mid\":\"/m/03tqj\",\"description\":\"icon\",\"score\":0.097528793},{\"mid\":\"/m/0hr95w1\",\"description\":\"pointer\",\"score\":0.03663468},{\"mid\":\"/m/0n0j\",\"description\":\"area\",\"score\":0.033584446}],\"textAnnotations\":[{\"locale\":\"en\",\"description\":\"Google\\n\",\"boundingPoly\":{\"vertices\":[{\"x\":61,\"y\":26},{\"x\":598,\"y\":26},{\"x\":598,\"y\":227},{\"x\":61,\"y\":227}]}}]}]}";
-     //retrieveProductNameByImage(jsonInput);
-        
-     //step 1
-     Map<String, Integer> map = new HashMap<String, Integer>();
-     map.put("1",5);
-     map.put("2",6);
-     map.put("3",7);
-     map.put("4",8);
-     map.put("5",9);
-     map.put("6",10);
-     map.put("7",11);
-        
-     //step 2 sort entries
-     Set<Entry<String, Integer>> set = map.entrySet();
-     List<Entry<String, Integer>> list = new ArrayList<Entry<String, Integer>>(
-     set);
-     Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-     public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
-     return o2.getValue().compareTo(o1.getValue());
-     }
-
-     });
-        
-     //step 3 . get top 5 product or all top product(if less than 5)
-     ArrayList<Integer> idsArrList = new ArrayList<Integer>();
-     if(list.size() >= 5){
-     for(int i = 0 ;i < 5 ; i++){
-     Integer j = Integer.parseInt(list.get(i).getKey());
-     idsArrList.add(j);
-     }
-     } else {
-     for(int i = 0 ;i < list.size() ; i++){
-     Integer j = Integer.parseInt(list.get(i).getKey());
-     idsArrList.add(j);
-     }
-     }
-        
-     //For test only
-     for(int i = 0; i < idsArrList.size(); i++){
-     System.out.println(idsArrList.get(i));
-     }
-     }
-     */
 }
